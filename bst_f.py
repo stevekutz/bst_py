@@ -93,14 +93,37 @@ class BST:
         return max(left_height, right_height)
 
 
+    def search(self, value):
+        if self.root != None:
+            return self._search(value, self.root)   
+        else:
+            return False    
+
+
+    def _search(self, value, cur_node):
+        if value == cur_node.value:
+            return True
+        elif value < cur_node.value and cur_node.left_child != None:
+            return self._search(value, cur_node.left_child)
+        elif value > cur_node.value and cur_node.right_child != None:
+            return self._search(value, cur_node.right_child)
+        return False
+
+
+
+
 
 list_vals = []
 
 t = BST()
 t = t.fill_tree(t)
+# t.insert(3)
+# t.insert(4)
+# t.insert(5)
 
 t.print_tree()
 print(sorted(list_vals))
 print(f'\n\nlen(list_vals)  {len(list_vals)}')
 print(f' sum of list_vals {sum(list_vals)}')
-print(f' \n height of tree is {t.height()}\n')
+print(f' \n height of tree is {t.height()}, worst case search time would take {t.height()} steps \n')
+print(f' searched for 8  {t.search(8)}')
