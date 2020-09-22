@@ -149,16 +149,102 @@ class BST:
         return tree
 
 
+    def delete_value(self, value):
+        return self.delete_node(self.find(value))
+
+    def delete_node(self, node):
+
+        # helper - returns child node with min value from an input node    
+        def min_value_node(n):
+            current = n
+            while current.left_child != None:
+                current = current.left_child
+            return current    
+
+        # helper - returns # of children of given node >> 0, 1, or 2
+        def num_children(n):
+            num_children = 0
+            if n.left_child != None:
+                num_children += 1
+            if n.right_child != None:
+                num_children += 1
+            return num_children
+
+        # get parent of targetted node for deletion
+        node_parent = node.parent
+
+        # find number of children of targeted node for deletion
+        node_children = num_children(node)
+
+        ###########################  Cases for deletion node   ###########################
+        # CASE #1   node has no children
+
+        if node_children == 0:
+            if node_parent != None:
+                # remove reference to targeted node for deletion
+                if node_parent.left_child == node:
+                    node_parent.left_child = None
+                else:
+                    node_parent.right_child = None
+
+        # CASE #2   node has a single child
+
+        if node_children == 1:
+            # find the single child node
+            if node.left_child != None:
+                child = node.left_child
+            else:
+                child = node.right_child    
+
+
+            if node_parent != None:
+                # replace targeted node for deletion with child
+                if node_parent.left_child == node:
+                    node_parent.left_child = child
+                else:
+                    node_parent.right_child = child
+            else:
+                self.root = child
+
+            # adjust the parent pointer in node
+            child.parent = node_parent  
+
+
+        # CASE #3   node has two children 
+                  
+        if node_children == 2:
+            
+            # find IN-ORDER successor value of targeted node for deletion
+            successor = min_value_node(node.right_child)
+
+            # copy IN-ORDER successor value into node that held deleted node value
+            node.value = successor.value
+
+            # delete IN-ORDER successor since value has been copied into node
+            self.delete_node(successor)
+
+
+
+
+
+
+
+
+
 
 list_vals = []
 
 t = BST()
 
-t = t.fill_tree(t)
+# t = t.fill_tree(t)
 
-# t.insert(3)
-# t.insert(4)
-# t.insert(5)
+t.insert(5)
+t.insert(4)
+t.insert(6)
+t.insert(10)
+t.insert(9)
+t.insert(11)
+t.insert(2)
 
 t.print_tree()
 print(sorted(list_vals))
@@ -167,4 +253,18 @@ print(f' sum of list_vals {sum(list_vals)}')
 print(f' \n height of tree is {t.height()}, worst case search time would take {t.height()} steps \n')
 print(f' searched for 8  {t.search(8)}')
 
-print(t.find(10))
+# print(t.find(10))
+# t.delete_value(5)
+# print(t.search(5))   # False
+
+# t.delete_value(4)
+# print(f' \n height of tree is {t.height()}, worst case search time would take {t.height()} steps \n')
+# print(t.search(4))
+
+# t.delete_value(5)
+# print(f' \n height of tree is {t.height()}, worst case search time would take {t.height()} steps \n')
+# print(t.search(5))   # False
+
+t.delete_value(11)
+print(f' \n height of tree is {t.height()}, worst case search time would take {t.height()} steps \n')
+print(t.search(11))
