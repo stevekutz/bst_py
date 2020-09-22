@@ -66,8 +66,10 @@ class BST:
         for _ in range(num_elems):
             
             cur_elem = randint(0, max_int)
+    
             # check to make sure no duplicate values made
             while cur_elem in num_set:
+                print(f' value {cur_elem} already used, recalc random value')
                 cur_elem = randint(0, max_int)
             
             num_set.add(cur_elem)
@@ -75,6 +77,22 @@ class BST:
             list_vals.append(cur_elem)
 
         return tree    
+
+
+    def height(self):
+        if self.root != None:
+            return self._height(self.root, 0)
+        else:
+            return 0  # if root value is 0, there is no tree, no height    
+
+    def _height(self, cur_node, cur_height):
+        if cur_node == None: 
+            return cur_height
+        left_height = self._height(cur_node.left_child, cur_height + 1)   
+        right_height = self._height(cur_node.right_child, cur_height + 1)
+        return max(left_height, right_height)
+
+
 
 list_vals = []
 
@@ -85,3 +103,4 @@ t.print_tree()
 print(sorted(list_vals))
 print(f'\n\nlen(list_vals)  {len(list_vals)}')
 print(f' sum of list_vals {sum(list_vals)}')
+print(f' \n height of tree is {t.height()}\n')
