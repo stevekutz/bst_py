@@ -3,7 +3,7 @@ class Node:
         self.value = value
         self.left_child = None
         self.right_child = None
-
+        self.parent = None  # a pointer to the parent node in the tree
 
 class BST:
     def __init__(self):
@@ -22,15 +22,19 @@ class BST:
         if value < cur_node.value:
             if cur_node.left_child == None:
                 # create a new Node if one does NOT exist
-                cur_node.left_child = Node(value)        
+                cur_node.left_child = Node(value)   
+                # add this to track parent
+                cur_node.left_child.parent = cur_node     
             else:
                 # use recursion to find next avail left_child
-                self._insert(value, cur_node.left_child)                
+                self._insert(value, cur_node.left_child)  
 
         elif value > cur_node.value:
             if cur_node.right_child == None:
                 # create a new Node if needed
                 cur_node.right_child = Node(value)
+                # add this to track parent
+                cur_node.right_child.parent = cur_node              
             else:
                 # use recursion to find next avail right_child
                 self._insert(value, cur_node.right_child)    
@@ -38,6 +42,21 @@ class BST:
         else:
             print(f' Value {cur_node.value} already exists in BST')
 
+
+    def find(self, value):
+        if self.root != None:
+            return self._find(value, self.root)
+        else:
+            return None
+
+    def _find(self, value, cur_node):
+        if value == cur_node.value:
+            print(f' current node value is {cur_node.value}')
+            return cur_node
+        elif value < cur_node.value and cur_node.left_child != None:
+            return self._find(value, cur_node.left_child)    
+        elif value > cur_node.value and cur_node.right_child != None:
+            return self._find(value, cur_node.right_child)    
 
     def print_tree(self):
         if self.root != None:
@@ -110,13 +129,33 @@ class BST:
         return False
 
 
+    def fill_tree(self, tree, num_elems = 100, max_int = 1000):
+        from random import randint
+        num_set = set()
+
+        for _ in range(num_elems):
+            
+            cur_elem = randint(0, max_int)
+
+            # check to make sure no duplicate values made
+            while cur_elem in num_set:
+                print(f' value {cur_elem} already used, recalc random value')
+                cur_elem = randint(0, max_int)
+            
+            num_set.add(cur_elem)
+            tree.insert(cur_elem)
+            list_vals.append(cur_elem)
+
+        return tree
 
 
 
 list_vals = []
 
 t = BST()
+
 t = t.fill_tree(t)
+
 # t.insert(3)
 # t.insert(4)
 # t.insert(5)
@@ -127,3 +166,5 @@ print(f'\n\nlen(list_vals)  {len(list_vals)}')
 print(f' sum of list_vals {sum(list_vals)}')
 print(f' \n height of tree is {t.height()}, worst case search time would take {t.height()} steps \n')
 print(f' searched for 8  {t.search(8)}')
+
+print(t.find(10))
