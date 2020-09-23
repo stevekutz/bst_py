@@ -154,6 +154,12 @@ class BST:
 
     def delete_node(self, node):
 
+
+        if node == None or self.find(node.value) == None:
+            print("Node to be deleted not found in the tree!")
+            return None    
+
+
         # helper - returns child node with min value from an input node    
         def min_value_node(n):
             current = n
@@ -223,10 +229,39 @@ class BST:
             # delete IN-ORDER successor since value has been copied into node
             self.delete_node(successor)
 
+    def find_sum(self, root):
+
+            # print(f' root is {root}')
+            
+            if (root == None):
+                return 0
+            return (root.value + self.find_sum(root.left_child)  + self.find_sum(root.right_child))  
 
 
+    def rangeSumBST(self, root, L, R):
+            """
+            :type root: TreeNode
+            :type L: int
+            :type R: int
+            :rtype: int
+            """
+            st = [root]    # stack
+            sum = 0
+            ###### this solutions makes sure that the Node variables match    
+            # DFS used with stack
+            while st:
+                cur = st.pop()
+                if cur:
+                    if cur.value >= L and cur.value <= R:
+                        sum += cur.value    
+                    if cur.value > L:
+                        st.append(cur.left_child)
+                    if cur.value < R:
+                        st.append(cur.right_child)
+            return sum      
 
 
+    # def rangeSum_rec(self, root, L, R):
 
 
 
@@ -238,20 +273,30 @@ t = BST()
 
 # t = t.fill_tree(t)
 
-t.insert(5)
-t.insert(4)
-t.insert(6)
+# [ 10, 5, 15, 3, 7, 13, 18, 1, null, 6]
+
 t.insert(10)
-t.insert(9)
-t.insert(11)
-t.insert(2)
+t.insert(5)
+t.insert(15)
+t.insert(3)
+t.insert(7)
+t.insert(13)
+t.insert(18)
+t.insert(1)
+# t.insert(None)
+t.insert(6)
 
 t.print_tree()
 print(sorted(list_vals))
 print(f'\n\nlen(list_vals)  {len(list_vals)}')
 print(f' sum of list_vals {sum(list_vals)}')
 print(f' \n height of tree is {t.height()}, worst case search time would take {t.height()} steps \n')
-print(f' searched for 8  {t.search(8)}')
+# print(f' searched for 8  {t.search(8)}')
+print(t.rangeSumBST(t.root, 6, 10))    # 23   ### !! NOTICE t.root passed in !!!!
+# print(t.rangeSumBST(t.root, 6, 100))
+sumval = t.find_sum(t.root)
+print(f' sum is ==> {sumval}')
+
 
 # print(t.find(10))
 # t.delete_value(5)
@@ -265,6 +310,6 @@ print(f' searched for 8  {t.search(8)}')
 # print(f' \n height of tree is {t.height()}, worst case search time would take {t.height()} steps \n')
 # print(t.search(5))   # False
 
-t.delete_value(11)
-print(f' \n height of tree is {t.height()}, worst case search time would take {t.height()} steps \n')
-print(t.search(11))
+# t.delete_value(11)
+# print(f' \n height of tree is {t.height()}, worst case search time would take {t.height()} steps \n')
+# print(t.search(11))

@@ -24,6 +24,12 @@ Note:
 
 """
 
+
+#  Apply a DFS
+
+
+
+##### Iterative approach
 class Solution(object):
     def rangeSumBST(self, root, L, R):
         """
@@ -33,15 +39,32 @@ class Solution(object):
         :rtype: int
         """
         st = [root]    # stack
-        res = 0
+        sum = 0
 
         while st:
             cur = st.pop()
             if cur:
                 if cur.val >= L and cur.val <= R:
-                    res += cur.val    
+                    sum += cur.val    
                 if cur.val > L:
                     st.append(cur.left)
                 if cur.val < R:
                     st.append(cur.right)
-        return res                
+        return sum                
+
+
+##### Recursive approach
+    def rangeSumBST(self, root, L, R):
+        
+        def dfs(node):
+            if node:
+                if L <= node.val <= R:
+                    self.ans += node.val
+                if L < node.val:
+                    dfs(node.left)
+                if node.val < R:
+                    dfs(node.right)
+
+        self.ans = 0
+        dfs(root)
+        return self.ans
