@@ -261,10 +261,21 @@ class BST:
             return sum      
 
 
-    # def rangeSum_rec(self, root, L, R):
+    def rangeSum_rec(self, root, L, R):
+        self.sum = 0
 
+        def sum_nodes(root):
+            if root == None:
+                return
+            if root.value >= L and root.value <= R:
+                self.sum += root.value
+            if root.value > L:
+                sum_nodes(root.left_child)        
+            if root.value < R:
+                sum_nodes(root.right_child)    
 
-
+        sum_nodes(root)
+        return self.sum
 
 
 list_vals = []
@@ -293,9 +304,12 @@ print(f' sum of list_vals {sum(list_vals)}')
 print(f' \n height of tree is {t.height()}, worst case search time would take {t.height()} steps \n')
 # print(f' searched for 8  {t.search(8)}')
 print(t.rangeSumBST(t.root, 6, 10))    # 23   ### !! NOTICE t.root passed in !!!!
+print(f' \n Next is recursive')
+print(t.rangeSum_rec(t.root, 6, 10))
+
 # print(t.rangeSumBST(t.root, 6, 100))
-sumval = t.find_sum(t.root)
-print(f' sum is ==> {sumval}')
+# sumval = t.find_sum(t.root)
+# print(f' sum is ==> {sumval}')
 
 
 # print(t.find(10))
